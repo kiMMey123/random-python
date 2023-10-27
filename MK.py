@@ -40,16 +40,17 @@ class tournament():
         if len(tour_name) > 20:
             print("tournament name must be less than 20 characters long")
             return
+        self.name = tour_name
         
         jsonfile = tour_name + ".json"
         jsonpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), "tours", jsonfile)
         self.clear()
 
         if os.path.exists(jsonpath):
-            self.load_tournament(jsonfile)
+            self.load_tournament()
         else:
             self.new_tournament()
-            self.save_tournament(jsonfile)
+            self.save_tournament()
 
     def play_tournament(self):
         for i in range(self.current_round, len(self.rounds)):
@@ -119,10 +120,8 @@ class tournament():
                 self.clear()
 
             self.current_race += 1
-            self.save_tournament(f'{self.name}.json')
+            self.save_tournament()
             self.clear()
-
-
         self.show_leaderboard(True)
         
     
@@ -194,7 +193,6 @@ class tournament():
         print("\n")
         input("Press enter to continue...")
 
-
     def new_tournament(self):
         players_ok = False
         while not players_ok:
@@ -214,7 +212,7 @@ class tournament():
             name = ply.strip()
             if name != "":
                 new_player = player()
-                new_player.name = name.split(" ")[0].strip().capitalize()
+                new_player.name = " ".join(name.split()).title()
                 self.players.append(new_player)
 
         confirm_rounds = False
@@ -304,7 +302,8 @@ class tournament():
         for player in self.players:
             print(player.name)
 
-    def load_tournament(self, jsonfile):
+    def load_tournament(self):
+        jsonfile = self.name + ".json"
         filedir = os.path.dirname(os.path.realpath(__file__))
         tours_dir = os.path.join(filedir, "tours")
         if not os.path.exists(tours_dir):
@@ -335,7 +334,8 @@ class tournament():
         
         self.print_players()
 
-    def save_tournament(self, jsonfile):
+    def save_tournament(self):
+        jsonfile = self.name + ".json"
         filedir = os.path.dirname(os.path.realpath(__file__))
         tours_dir = os.path.join(filedir, "tours")
         if not os.path.exists(tours_dir):
