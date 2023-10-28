@@ -1,0 +1,392 @@
+{
+    "players": [
+        {
+            "id": "ED1TV609DJ",
+            "name": "Ole Fredrik",
+            "positions": [
+                [
+                    1,
+                    4,
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    3,
+                    2,
+                    3
+                ]
+            ],
+            "scores": [
+                [
+                    15,
+                    9,
+                    12,
+                    15
+                ],
+                [
+                    12,
+                    10,
+                    12,
+                    10
+                ]
+            ],
+            "finals": [
+                4,
+                3,
+                3,
+                3,
+                3,
+                4,
+                3,
+                4
+            ],
+            "finals_score": 77
+        },
+        {
+            "id": "6LAF2L0ZEV",
+            "name": "Ann-Katrin",
+            "positions": [
+                [
+                    3,
+                    6,
+                    8,
+                    2
+                ],
+                [
+                    9,
+                    5,
+                    5,
+                    8
+                ]
+            ],
+            "scores": [
+                [
+                    10,
+                    7,
+                    5,
+                    12
+                ],
+                [
+                    4,
+                    8,
+                    8,
+                    5
+                ]
+            ],
+            "finals": [],
+            "finals_score": 0
+        },
+        {
+            "id": "OTCNGUKGWJ",
+            "name": "Miriam",
+            "positions": [
+                [
+                    2,
+                    2,
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    1,
+                    1,
+                    1
+                ]
+            ],
+            "scores": [
+                [
+                    12,
+                    12,
+                    15,
+                    15
+                ],
+                [
+                    15,
+                    15,
+                    15,
+                    15
+                ]
+            ],
+            "finals": [
+                2,
+                1,
+                2,
+                2,
+                2,
+                1,
+                2,
+                1
+            ],
+            "finals_score": 105
+        },
+        {
+            "id": "T52V04P0EG",
+            "name": "Hege",
+            "positions": [
+                [
+                    9,
+                    4,
+                    10,
+                    8
+                ],
+                [
+                    8,
+                    8,
+                    3,
+                    12
+                ]
+            ],
+            "scores": [
+                [
+                    4,
+                    9,
+                    3,
+                    5
+                ],
+                [
+                    5,
+                    5,
+                    10,
+                    1
+                ]
+            ],
+            "finals": [],
+            "finals_score": 0
+        },
+        {
+            "id": "9QMCDRHBRN",
+            "name": "Lise",
+            "positions": [
+                [
+                    2,
+                    2,
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    3,
+                    4,
+                    4
+                ]
+            ],
+            "scores": [
+                [
+                    12,
+                    12,
+                    15,
+                    15
+                ],
+                [
+                    10,
+                    10,
+                    9,
+                    9
+                ]
+            ],
+            "finals": [],
+            "finals_score": 0
+        },
+        {
+            "id": "Q10Z7XPO19",
+            "name": "Eyolf",
+            "positions": [
+                [
+                    3,
+                    5,
+                    4,
+                    12
+                ],
+                [
+                    5,
+                    1,
+                    1,
+                    1
+                ]
+            ],
+            "scores": [
+                [
+                    10,
+                    8,
+                    9,
+                    1
+                ],
+                [
+                    8,
+                    15,
+                    15,
+                    15
+                ]
+            ],
+            "finals": [],
+            "finals_score": 0
+        },
+        {
+            "id": "MO203VOINX",
+            "name": "Ole Magnus",
+            "positions": [
+                [
+                    3,
+                    2,
+                    1,
+                    5
+                ],
+                [
+                    1,
+                    3,
+                    7,
+                    2
+                ]
+            ],
+            "scores": [
+                [
+                    10,
+                    12,
+                    15,
+                    8
+                ],
+                [
+                    15,
+                    10,
+                    6,
+                    12
+                ]
+            ],
+            "finals": [],
+            "finals_score": 0
+        },
+        {
+            "id": "OWGW7FJ5XH",
+            "name": "Martin",
+            "positions": [
+                [
+                    2,
+                    1,
+                    3,
+                    2
+                ],
+                [
+                    2,
+                    1,
+                    2,
+                    1
+                ]
+            ],
+            "scores": [
+                [
+                    12,
+                    15,
+                    10,
+                    12
+                ],
+                [
+                    12,
+                    15,
+                    12,
+                    15
+                ]
+            ],
+            "finals": [
+                3,
+                2,
+                1,
+                4,
+                4,
+                2,
+                4,
+                2
+            ],
+            "finals_score": 88
+        },
+        {
+            "id": "36FZ3FQULA",
+            "name": "Kim",
+            "positions": [
+                [
+                    1,
+                    1,
+                    2,
+                    2
+                ],
+                [
+                    1,
+                    2,
+                    1,
+                    2
+                ]
+            ],
+            "scores": [
+                [
+                    15,
+                    15,
+                    12,
+                    12
+                ],
+                [
+                    15,
+                    12,
+                    15,
+                    12
+                ]
+            ],
+            "finals": [
+                1,
+                4,
+                4,
+                1,
+                1,
+                3,
+                1,
+                3
+            ],
+            "finals_score": 98
+        }
+    ],
+    "rounds": [
+        [
+            [
+                "Q10Z7XPO19",
+                "36FZ3FQULA",
+                "OTCNGUKGWJ"
+            ],
+            [
+                "6LAF2L0ZEV",
+                "T52V04P0EG",
+                "9QMCDRHBRN"
+            ],
+            [
+                "OWGW7FJ5XH",
+                "ED1TV609DJ",
+                "MO203VOINX"
+            ]
+        ],
+        [
+            [
+                "36FZ3FQULA",
+                "9QMCDRHBRN",
+                "OWGW7FJ5XH"
+            ],
+            [
+                "6LAF2L0ZEV",
+                "Q10Z7XPO19",
+                "MO203VOINX"
+            ],
+            [
+                "T52V04P0EG",
+                "OTCNGUKGWJ",
+                "ED1TV609DJ"
+            ]
+        ]
+    ],
+    "finals": [
+        "ED1TV609DJ",
+        "OTCNGUKGWJ",
+        "OWGW7FJ5XH",
+        "36FZ3FQULA"
+    ],
+    "name": "yay vi spiller",
+    "current_round": 2,
+    "current_split": 0,
+    "current_race": 8
+}
