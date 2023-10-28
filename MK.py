@@ -22,12 +22,26 @@ class tournament():
 
         self.clear()
         self.play_tournament()
+
+        self.clear()
+        winners = self.show_leaderboard(last_round=True)
+
+        self.finals = [p for p in self.players if p.name in [w["name"] for w in winners[:4]]]
+        self.play_finals(self.finals)
     
     def clear(self):
         if os.name == "nt":
             os.system("cls")
         else:
             os.system("clear")
+
+
+        if self.name:
+            print(f'---- {self.name.upper()} ----\n')
+            print("\n")
+        else:
+            print(f'---- MARIO KART TOURNAMENT GENERATOR BONANZA ----\n')
+            print("\n")
     
     def init_tournament(self):
         tour_name = input("Enter tournament name: ")
@@ -54,91 +68,147 @@ class tournament():
 
     def play_tournament(self):
         for i in range(self.current_round, len(self.rounds)):
+            last_split, last_round = False, False
             self.current_round = i
             for j in range(self.current_split, len(self.rounds[i])):
+                if j == len(self.rounds[i]) - 1:
+                    last_split = True
                 self.current_split = j
                 self.play_round(self.rounds[i][j])
                 self.current_split += 1
                 self.current_race = 0
             self.current_split = 0
             self.current_round += 1
-
-            self.show_leaderboard()
+            if i == len(self.rounds) - 1:
+                last_round = True
+            if not last_round:
+                self.show_leaderboard()
     
-    def play_round(self, split):
+    def play_round(self, split, finals=False):
         self.clear()
-        print(f'---- Round {self.current_round + 1} - Split {self.current_split + 1} ----\n')
+        if finals:
+            print(f'---- Finals ----\n')
+            num_races = 8
+        else:
+            print(f'---- Round {self.current_round + 1} - Split {self.current_split + 1} ----\n')
+            num_races = 4
         print("Players: " + ", ".join([p.name for p in split]))
-        input("\nPress enter to start split...")
-        print("\n")
+        if not finals:
+            print("\n")
+            input("\nPress enter to start split...")
+        else:
+            input("\nPress enter to start finals...")
+        self.clear()
         current_race = self.current_race + 1
-        while current_race <= 4:
+        while current_race <= num_races:
             race_accepted = False
             while not race_accepted:
                 player_positions = []
+                reset_race = False
                 for player in split:
-                    self.clear()
-                    print("Race", current_race, " of 4")
-                    print("\n")
-                    print(f'Enter position for: {player.name}')
-                    position_input = input("[1-12] position / [R]eset race: ")
-                    if position_input.strip().lower() == "r":
-                        break
-                    elif position_input.strip() in [str(i) for i in range(1, 13)]:
-                        player_pos = int(position_input.strip())
-                        if player_pos in player_positions:
-                            print("Invalid input, position already entered")
+                    player_entry_ok = False
+                    while not player_entry_ok:
+                        print(f'Race {current_race} of {num_races}')
+                        # print("Race", current_race, " of " + num_races)
+                        print("\n")
+                        print(f'Enter position for: {player.name}')
+                        position_input = input("[1-12] position / [R]eset race: ")
+                        if position_input.strip().lower() == "r":
+                            reset_race = True
+                            self.clear()
                             break
+                        elif position_input.strip() in [str(i) for i in range(1, 13)]:
+                            player_pos = int(position_input.strip())
+                            if player_pos in player_positions:
+                                self.clear()
+                                print("Invalid input, position already entered")
+                                continue
+                            else:
+                                self.clear()
+                                player_positions.append(player_pos)
+                                player_entry_ok = True
                         else:
-                            player_positions.append(player_pos)
+                            self.clear()
+                            print("Invalid input")
+                            continue
+                    if reset_race:
+                        break
+                self.clear()
+                if reset_race:
+                    break
+                else:
+                    race_table = pt(["Position", "Player"])
+                    for pos in sorted(player_positions):
+                        race_table.add_row([pos, [p.name for p in split if player_positions.index(pos) == split.index(p)][0]])
 
+                    print(race_table)
+                    print("\n")
+
+                    confirm_positions = input("[A]ccept, [R]eset race ")
+                    if confirm_positions.lower() == "a":
+                        race_accepted = True
+                        current_race += 1
+                        for player in split:
+                            if finals:
+                                player.add_position(player_positions[split.index(player)], None, finals=True)
+                            else:
+                                player.add_position(player_positions[split.index(player)], self.current_round)
+                    elif confirm_positions.lower() == "r":
+                        break
                     else:
                         print("Invalid input")
                         break
-
-                self.clear()
-
-                race_table = pt(["Position", "Player"])
-                for pos in sorted(player_positions):
-                    race_table.add_row([pos, [p.name for p in split if player_positions.index(pos) == split.index(p)][0]])
-
-                print(race_table)
-                print("\n")
-
-                confirm_positions = input("[A]ccept, [R]eset race ")
-                if confirm_positions.lower() == "a":
-                    race_accepted = True
-                    current_race += 1
-                    for player in split:
-                        player.add_position(player_positions[split.index(player)], self.current_round)
-                elif confirm_positions.lower() == "r":
-                    break
-                else:
-                    print("Invalid input")
-                    break
-                
-                self.clear()
+                    
+                    self.clear()
 
             self.current_race += 1
             self.save_tournament()
             self.clear()
-        self.show_leaderboard(True)
+        if not finals:
+            self.show_leaderboard(split=True)
+        else:
+            self.show_leaderboard(finals=True)
         
-    
-    def show_leaderboard(self, split=False):
+    def play_finals(self, winners):
         self.clear()
-        leaderboard = pt(["Pos.", "Name", "Score", "Avg. pos", "Best pos.", "Worst pos."])
+        print("---- Finals ----\n")
+        play_finals = input("Play finals? (y/n): ")
+        if not play_finals.lower() == "y":
+            self.clear()
+            print("Finals skipped")
+            print("\n")
+            print("Thank you for playing!")
+            print("\n")
+            print("See you next time!")
+            print("\n")
+            print("If you want to play the finals at a later time, you can load the tournament and play them manually")
+            print("\n")
+            print("To load this tournament, enter the following name: " + self.name)
+            print("\n")
+            input("Press enter to not continue...")
+            print("<3")
+            return
+        else:
+            self.play_round(split=self.finals, finals=True)
+            self.clear()
+    
+    def show_leaderboard(self, split=False, last_round=False, finals=False):
+        self.clear()
+        leaderboard = pt(["Pos.", "Name", "Score", "Avg. pos", "Best", "Worst"])
         leaderboard.align["Pos."] = "r"
         leaderboard.align["Name"] = "l"
         leaderboard.align["Score"] = "r"
         leaderboard.align["Avg. pos"] = "r"
-        leaderboard.align["Best pos."] = "r"
-        leaderboard.align["Worst pos."] = "r"
-
+        leaderboard.align["Best"] = "r"
+        leaderboard.align["Worst"] = "r"
 
         if split:
             print(f'---- Round {self.current_round + 1} - Split {self.current_split + 1} results ----\n')
             players = self.rounds[self.current_round][self.current_split]
+
+        elif finals:
+            print(f'---- Finals results ----\n')
+            players = self.finals
 
         else:
             print(f'---- Standings after round {self.current_round} ----\n')
@@ -150,6 +220,9 @@ class tournament():
             if split:
                 player_score = sum(player.scores[self.current_round])
                 all_pos = player.positions[self.current_round]
+            elif finals:
+                player_score = player.finals_score
+                all_pos = player.finals
             else:
                 player_score = 0
                 for i in range(len(player.scores)):
@@ -166,7 +239,6 @@ class tournament():
             }
             player_stats.append(player_data)
         
-
         player_stats.sort(key=lambda x: x["score"], reverse=True)
 
         for i in range(len(player_stats)):
@@ -187,11 +259,44 @@ class tournament():
                         position = i
                 else:
                     position = i
+            player_stats[i]["position"] = position
             leaderboard.add_row([position, player["name"], player["score"], round(player["avg_pos"], 2), player["best_pos"], player["worst_pos"]])
+
+        if last_round:
+            print("Tournament finished!")
+            print("\n")
+            if len(player_stats) >= 4:
+                print("Fourth place: " + player_stats[3]["name"])
+                print("\n")
+                input("Press enter to continue...")
+                self.clear()
+            if len(player_stats) >= 3:
+                print("Third place: " + player_stats[2]["name"])
+                print("\n")
+                input("Press enter to continue...")
+                self.clear()
+           
+            print("Second place: " + player_stats[1]["name"])
+            print("\n")
+            input("Press enter to continue...")
+            self.clear()
+            print("And the winner is...")
+            print("\n")
+            input("Press enter to continue...")
+            self.clear()
+            print(f'---- !!!! {player_stats[0]["name"].upper()} !!!! ----\n')
+            print("\n")
+            input("Press enter to continue...")
+            self.clear()
+            print("Congratulations to all players! We love you all! <3")
+            print("\n")
 
         print(leaderboard)
         print("\n")
         input("Press enter to continue...")
+        self.clear()
+        if last_round:
+            return player_stats
 
     def new_tournament(self):
         players_ok = False
@@ -276,7 +381,6 @@ class tournament():
                 print(tab)
                 print("\n")
             
-            
             while not rounds_accepted:
                 confirm_rounds = input("[A]ccept, [R]egenerate, [1-10] number of rounds: ")
                 if confirm_rounds.lower() == "a":
@@ -327,9 +431,13 @@ class tournament():
                         loaded_split.append([p for p in self.players if p.id == ply][0])
                     loaded_round.append(loaded_split)
                 self.rounds.append(loaded_round)
+            
+            finals = data["finals"]
+            for ply in finals:
+                self.finals.append([p for p in self.players if p.id == ply][0])
 
             for line in data:
-                if line not in ["players", "rounds"]:
+                if line not in ["players", "rounds", "finals"]:
                     self.__dict__[line] = data[line]
         
         self.print_players()
@@ -342,7 +450,7 @@ class tournament():
             os.mkdir(tours_dir)
         save_path = os.path.join(tours_dir, jsonfile)
 
-        save_data = {"players": [], "rounds": []}
+        save_data = {"players": [], "rounds": [], "finals": []}
         for player in self.players:
             save_data["players"].append(player.__dict__)
 
@@ -352,9 +460,12 @@ class tournament():
                 this_round.append([player.id for player in split])
             save_data["rounds"].append(this_round)
 
+        for player in self.finals:
+            save_data["finals"].append(player.id)
+
         with open(save_path, "w") as f:
             for x in self.__dict__:
-                if x not in ["players", "rounds"]:
+                if x not in ["players", "rounds", "finals"]:
                     save_data[x] = self.__dict__[x]
             json.dump(save_data, f, indent=4)
                     
@@ -364,13 +475,18 @@ class player():
         self.name        = ""
         self.positions   = []
         self.scores      = []
+        self.finals      = []
+        self.finals_score= 0
 
-    def add_position(self, position, round):
+    def add_position(self, position, round, finals=False):
         score_lookup = {1: 15, 2: 12, 3: 10, 4: 9, 5: 8, 6: 7, 7: 6, 8: 5, 9: 4, 10: 3, 11: 2, 12: 1}
-
         if int(position) > 0:
-            self.positions[round].append(int(position))
-            self.scores[round].append(score_lookup[int(position)])
+            if finals:
+                self.finals.append(position)
+                self.finals_score += score_lookup[int(position)]
+            else:
+                self.positions[round].append(int(position))
+                self.scores[round].append(score_lookup[int(position)])
 
 if __name__ == "__main__":
     tour = tournament()
